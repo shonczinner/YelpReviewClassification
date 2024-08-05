@@ -51,7 +51,7 @@ These dependencies are specified in the `requirements.txt` file. To install them
    - The dataset is read using `pandas` from the file `data/filtered_yelp_academic_dataset_review.json`.
 
 3. **Text and Labels**:
-   - Reviews text and their corresponding star ratings are extracted.
+   - Reviews text and their corresponding star ratings are extracted.   
    - Labels are adjusted from the range `{1,...,5}` to `{0,...,4}` for zero-based indexing.
 
 4. **Encoding**:
@@ -126,4 +126,5 @@ The `requirements.txt` file used for this project is as follows:
 pandas==2.2.2
 matplotlib==3.9.1
 numpy==1.24.1
-torch==2.3.1+cu121
+--extra-index-url https://download.pytorch.org/whl/cu121
+torch==2.3.1
