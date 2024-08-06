@@ -55,7 +55,7 @@ These dependencies are specified in the `requirements.txt` file. To install them
    - Labels are adjusted from the range `{1,...,5}` to `{0,...,4}` for zero-based indexing.
 
 4. **Encoding**:
-   - `Text_Encoder` is used to encode the text data into numerical format suitable for input into machine learning models.
+   - `Text_Encoder` is used to encode the text data into numerical format suitable for input into machine learning models. In particular we use the most frequent `k` words as tokens, with all remaining words set as unknown.
    - The vocabulary size is set to `k + 2` to account for padding and unknown tokens.
 
 5. **Tensorization**:
