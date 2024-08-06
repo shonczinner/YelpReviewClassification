@@ -18,7 +18,7 @@ class Text_Classification_Handler:
         self.training_percent = training_percent
         self.batch_size = batch_size
 
-        training_indices = np.random.choice(x.shape[0],size = int(x.shape[0]*training_percent))
+        training_indices = np.random.choice(x.shape[0],size = int(x.shape[0]*training_percent),replace=False)
 
         self.train_x = self.x[training_indices,:]
         self.train_y = self.y[training_indices]
