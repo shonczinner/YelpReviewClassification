@@ -111,7 +111,7 @@ To run the script, follow these steps:
 2. **Run the Script**:
 
     ```bash
-    python main.py
+    python train_and_save_models.py
     ```
 
 Make sure the `data/filtered_yelp_academic_dataset_review.json` file is correctly placed relative to the script and that the `utils` and `models` directories contain the required custom modules.

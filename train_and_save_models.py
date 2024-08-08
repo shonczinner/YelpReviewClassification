@@ -7,6 +7,9 @@ import matplotlib.pyplot as plt
 k = 1000
 vocab_size = k+2 # + 2 for padding token and unknown token
 n_classes = 5 # reviews are {1,...,5} stars
+n_epochs = 200
+batch_size = 32
+training_percent = 0.8
 
 data_path ="data/filtered_yelp_academic_dataset_review.json"
 reviews = pd.read_json(data_path,lines=True)
@@ -20,15 +23,15 @@ x,y = tensorize_dataset(enc1.pad_encodings([enc1.encode(s) for s in dat1.texts])
 mlp_model = MLP_1D(vocab_size,32,3,400,n_classes)
 bow_model = Linear_Network(vocab_size,n_classes)
 
-batch_size = 32
-training_percent = 0.8
-
 mlp_handler = Text_Classification_Handler(mlp_model,x,y,training_percent,batch_size)
 bow_handler = Text_Classification_Handler(bow_model,x,y,training_percent,batch_size)
 
-n_epochs = 200
+
 mlp_handler.train(n_epochs)
 bow_handler.train(n_epochs)
+
+mlp_handler.save_model("mlp_model.pt")
+bow_handler.save_model("bow_handler.pt")
 
 plt.plot(mlp_handler.get_epoch_losses(),label="1D Conv_MLP")
 plt.plot(bow_handler.get_epoch_losses(),label="Bag of words linear model")
