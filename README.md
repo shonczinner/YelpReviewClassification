@@ -115,8 +115,16 @@ To run the script, follow these steps:
 
 2. **Run the Script**:
 
+To train and save the 1D convolution MLP and linear bag-of-words model,
+
     ```bash
     python train_and_save_models.py
+    ```
+
+To run the trained 1D convolution MLP model on a test review,
+
+    ```bash
+    python use_mlp_model.py
     ```
 
 Make sure the `data/filtered_yelp_academic_dataset_review.json` file is correctly placed relative to the script and that the `utils` and `models` directories contain the required custom modules.
