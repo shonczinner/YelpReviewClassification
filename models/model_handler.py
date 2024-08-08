@@ -4,41 +4,41 @@ import matplotlib.pyplot as plt
 
 # Model training/evaluating/using class
 class Text_Classification_Handler:
-    def __init__(self, model, x, y, training_percent,batch_size):
+    def __init__(self, model, x=None, y=None, training_percent=None,batch_size=None):
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         #self.device = "cpu"
-        if model is not None:
-            self.model = model.to(self.device)
-        else:
-            self.model = None
-            
-        self.x = x.to(self.device)
-        self.y = y.to(self.device)
 
-        self.training_percent = training_percent
-        self.batch_size = batch_size
+        self.model = model.to(self.device)
+        
+        if x is not None:
+            self.x = x.to(self.device)
+            self.y = y.to(self.device)
 
-        training_indices = np.random.choice(x.shape[0],size = int(x.shape[0]*training_percent),replace=False)
+            self.training_percent = training_percent
+            self.batch_size = batch_size
 
-        self.train_x = self.x[training_indices,:]
-        self.train_y = self.y[training_indices]
+            training_indices = np.random.choice(x.shape[0],size = int(x.shape[0]*training_percent),replace=False)
 
-        self.test_x = self.x[~training_indices,:]
-        self.test_y = self.y[~training_indices]
+            self.train_x = self.x[training_indices,:]
+            self.train_y = self.y[training_indices]
 
-        self.train_dataset = torch.utils.data.TensorDataset(self.train_x,self.train_y)
-        self.test_dataset = torch.utils.data.TensorDataset(self.test_x,self.test_y)
+            self.test_x = self.x[~training_indices,:]
+            self.test_y = self.y[~training_indices]
 
-        self.train_loader = torch.utils.data.DataLoader(self.train_dataset,batch_size=batch_size,shuffle=True)
-        self.test_loader = torch.utils.data.DataLoader(self.test_dataset,batch_size=batch_size)
+            self.train_dataset = torch.utils.data.TensorDataset(self.train_x,self.train_y)
+            self.test_dataset = torch.utils.data.TensorDataset(self.test_x,self.test_y)
 
-        self.criterion = torch.nn.CrossEntropyLoss()
-        self.optimizer = torch.optim.AdamW(model.parameters(), lr=0.001)
+            self.train_loader = torch.utils.data.DataLoader(self.train_dataset,batch_size=batch_size,shuffle=True)
+            self.test_loader = torch.utils.data.DataLoader(self.test_dataset,batch_size=batch_size)
 
-        self.epoch_losses = []
-        self.evaluation_accuracies = []
+            self.criterion = torch.nn.CrossEntropyLoss()
+            self.optimizer = torch.optim.AdamW(model.parameters(), lr=0.001)
+
+            self.epoch_losses = []
+            self.evaluation_accuracies = []
 
     def train(self,epochs,evaluation_rate=1,print_loss_rate=100):
+        assert self.train_x is not None, "No training data"
         for epoch in range(epochs):
             print(f"Epoch: {epoch}")
             if epoch==0 or (evaluation_rate>0 and epoch%evaluation_rate==(evaluation_rate-1)):
@@ -47,6 +47,7 @@ class Text_Classification_Handler:
         self.evaluate()
 
     def train_epoch(self,print_loss_rate):
+        assert self.train_x is not None, "No training data"
         epoch_loss = 0.0
         for i,(inputs,labels) in enumerate(self.train_loader):       
             self.optimizer.zero_grad()
@@ -60,6 +61,7 @@ class Text_Classification_Handler:
         self.epoch_losses.append(epoch_loss)
 
     def evaluate(self):
+        assert self.test_x is not None, "No testing data"
         self.model.eval()
         correct = 0
         total = 0
@@ -100,7 +102,7 @@ class Text_Classification_Handler:
             _, predicted = torch.max(outputs.data, 1)
         self.model.train()
         prediction =  predicted.cpu().numpy()[0]
-        print(f"The string '{s}' has output: {prediction}")
+        #print(f"The string '{s}' has output: {prediction}")
         return predicted.cpu().numpy()[0]
     
     def save_model(self, path):
