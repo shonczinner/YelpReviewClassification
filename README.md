@@ -1,3 +1,8 @@
+![Loss Plot](images/losses.jpg)
+
+![Accuracy Plot](images/accuracies.jpg)
+
+
 # Text Classification with MLP and Bag-of-Words Models
 
 This project demonstrates how to perform text classification using two different models: a 1D Convolutional Multi-Layer Perceptron (MLP) and a Bag-of-Words (BoW) linear model. The example uses the Yelp reviews dataset to classify reviews into star ratings from 1 to 5.
