@@ -17,13 +17,21 @@ class Text_Classification_Handler:
             self.training_percent = training_percent
             self.batch_size = batch_size
 
-            training_indices = np.random.choice(x.shape[0],size = int(x.shape[0]*training_percent),replace=False)
+            # Generate random indices for training data
+            training_indices = np.random.choice(x.shape[0], size=int(x.shape[0] * training_percent), replace=False)
 
-            self.train_x = self.x[training_indices,:]
+            # Create a mask that is True for test indices
+            all_indices = np.arange(x.shape[0])
+            test_indices = np.setdiff1d(all_indices, training_indices)
+
+            # Select training data
+            self.train_x = self.x[training_indices, :]
             self.train_y = self.y[training_indices]
 
-            self.test_x = self.x[~training_indices,:]
-            self.test_y = self.y[~training_indices]
+            # Select test data
+            self.test_x = self.x[test_indices, :]
+            self.test_y = self.y[test_indices]
+
 
             self.train_dataset = torch.utils.data.TensorDataset(self.train_x,self.train_y)
             self.test_dataset = torch.utils.data.TensorDataset(self.test_x,self.test_y)
